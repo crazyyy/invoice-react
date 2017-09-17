@@ -1,10 +1,9 @@
-var express = require('express'),
-    bodyParser = require('body-parser'),
-    http = require('http'),
-    path = require('path'),
-    Sequelize = require('sequelize'),
-    _ = require('lodash');
-
+const express =  require('express');
+const bodyParser =  require('body-parser');
+const http =  require('http');
+const path =  require('path');
+const Sequelize =  require('sequelize');
+const _ =  require('lodash');
 
 sequelize = new Sequelize('sqlite://' + path.join(__dirname, 'invoices.sqlite'), {
   dialect: 'sqlite',
