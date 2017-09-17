@@ -1,0 +1,27 @@
+{
+  "name": "Invoice React",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crazyyy/invoice-react.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/crazyyy/invoice-react/issues"
+  },
+  "homepage": "https://github.com/crazyyy/invoice-react#readme",
+  "devDependencies": {
+    "body-parser": "^1.18.1",
+    "express": "^4.15.4",
+    "lodash": "^4.17.4",
+    "sequelize": "^4.8.4",
+    "sqlite3": "^3.1.11"
+  }
+}
