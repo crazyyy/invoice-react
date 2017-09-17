@@ -9779,74 +9779,6 @@ var _AppView2 = _interopRequireDefault(_AppView);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// export default class App extends React.Component {
-// 	constructor(props) {
-// 		super(props);
-// 		this.state = {
-// 			currentInvoice: {},
-// 			currentItem: {},
-//       visibility: 'hidden'
-// 		};
-// 	}
-
-//   render() {
-
-// 		let invoices = this.props.invoices || [];
-// 		let customers = this.props.customers || [];
-// 		let products = this.props.products || [];
-//     let invoiceItems = this.props.invoiceItems || [];
-
-// 		return <div className="col-xl-12 col-md-12">
-// 				<h1>List of Invoices</h1>
-// 				<table className="table">
-// 					<thead>
-// 						<tr>
-// 							<th>#</th>
-// 							<th>Customer</th>
-// 							<th>Discount</th>
-// 							<th>Total</th>
-// 							<th>Action</th>
-// 						</tr>
-// 					</thead>
-// 					<tbody>
-//           {invoices.map(el => {
-//             return <tr key={el.id} className={this.state.currentInvoice.id === el.id ? 'active' : ''} onClick={() => {
-// 						this.setState({ currentInvoice: el, visibility: 'visible' });
-// 						this.props.onSelectInvoice(el.id);
-// 					}}>
-// 					<td>{el.id}</td>
-// 					<td>
-// 						{customers.filter(customer => customer.id === el.customer_id)[0] ===
-// 						undefined ? null : (
-// 							customers.filter(customer => customer.id === el.customer_id)[0].name
-// 						)}
-// 					</td>
-// 					<td>{el.discount === '' ? '0 %' : el.discount + ' %'}</td>
-// 					<td>{Math.round((el.total - el.total * (el.discount / 100)) * 100) / 100}</td>
-// 					<td>
-// 						<button>
-// 							<i className="glyphicon glyphicon-pencil" />
-// 						</button>
-// 						<button>
-// 							<i className="glyphicon glyphicon-trash" onClick={e => {
-// 									this.props.onDeleteInvoice(el.id);
-// 									this.setState({ visibility: 'hidden' });
-// 									e.stopPropagation();
-// 								}} />
-// 						</button>
-// 					</td>
-// 				</tr>
-// 						})}
-// 					</tbody>
-// 				</table>
-// 				<button type="button" className="btn btn-default" onClick={() => this.props.onCreateInvoice()}>
-// 					Create Invoice
-// 				</button>
-// 			</div>;
-// 	}
-// }
-
-
 _reactDom2.default.render(_react2.default.createElement(_container2.default, null), document.getElementById('container'));
 
 /***/ }),
@@ -23873,7 +23805,7 @@ module.exports = abstractMethod;
 
 
 Object.defineProperty(exports, "__esModule", {
-	value: true
+    value: true
 });
 
 var _AppDispatcher = __webpack_require__(208);
@@ -23887,186 +23819,186 @@ var _api2 = _interopRequireDefault(_api);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function calculateTotal(invoice_id) {
-	Promise.all([_api2.default.getInvoiceItems(invoice_id), _api2.default.getProducts()]).then(function (array) {
-		var items = array[0];
-		var products = array[1];
-		var sum = 0;
-		items.forEach(function (item) {
-			var price = products.filter(function (product) {
-				return item.product_id === product.id;
-			})[0].price;
-			var itemPrice = price * item.quantity;
-			sum = sum + itemPrice;
-		});
-		return Math.round(sum * 100) / 100;
-	}).then(function (total) {
-		return _api2.default.changeInvoice(invoice_id, { total: total });
-	});
+    Promise.all([_api2.default.getInvoiceItems(invoice_id), _api2.default.getProducts()]).then(function (array) {
+        var items = array[0];
+        var products = array[1];
+        var sum = 0;
+        items.forEach(function (item) {
+            var price = products.filter(function (product) {
+                return item.product_id === product.id;
+            })[0].price;
+            var itemPrice = price * item.quantity;
+            sum = sum + itemPrice;
+        });
+        return Math.round(sum * 100) / 100;
+    }).then(function (total) {
+        return _api2.default.changeInvoice(invoice_id, { total: total });
+    });
 }
 
 var Actions = {
-	loadInvoices: function loadInvoices() {
-		window.loadInvoices = this.loadInvoices;
-		_api2.default.getInvoices().then(function (data) {
-			_AppDispatcher2.default.dispatch({
-				type: 'invoices_loaded',
-				invoices: data
-			});
-		});
-	},
-	loadProducts: function loadProducts() {
-		_api2.default.getProducts().then(function (data) {
-			_AppDispatcher2.default.dispatch({
-				type: 'products_loaded',
-				products: data
-			});
-		});
-	},
-	loadCustomers: function loadCustomers() {
-		_api2.default.getCustomers().then(function (data) {
-			_AppDispatcher2.default.dispatch({
-				type: 'customers_loaded',
-				customers: data
-			});
-		});
-	},
-	loadAll: function loadAll() {
-		return Promise.all([Actions.loadInvoices()]);
-	},
-	createInvoice: function createInvoice() {
-		_api2.default.createInvoice().then(function (data) {
-			return _api2.default.getInvoices();
-		}).then(function (data) {
-			return _AppDispatcher2.default.dispatch({
-				type: 'invoice_created',
-				invoices: data
-			});
-		});
-	},
-	deleteInvoice: function deleteInvoice(id) {
-		_api2.default.deleteInvoice(id).then(function (data) {
-			return _api2.default.getInvoices();
-		}).then(function (data) {
-			return _AppDispatcher2.default.dispatch({
-				type: 'invoice_deleted',
-				invoices: data
-			});
-		});
-	},
-	loadInvoiceItems: function loadInvoiceItems(id) {
-		_api2.default.getInvoiceItems(id).then(function (data) {
-			return _AppDispatcher2.default.dispatch({
-				type: 'invoice_items_loaded',
-				items: data
-			});
-		});
-	},
-	changeCustomer: function changeCustomer(customer_id, invoice_id) {
-		_api2.default.changeCustomer(customer_id, invoice_id).then(function (data) {
-			return _api2.default.getInvoices();
-		}).then(function (data) {
-			return _AppDispatcher2.default.dispatch({
-				type: 'customer_changed',
-				invoices: data
-			});
-		});
-	},
-	addItem: function addItem(invoice_id, product_id) {
-		_api2.default.createItem(invoice_id).then(function (item) {
-			return item.id;
-		}).then(function (item_id) {
-			return _api2.default.changeItem(invoice_id, item_id, {
-				product_id: product_id,
-				quantity: 1
-			});
-		}).then(function () {
-			return calculateTotal(invoice_id);
-		}).then(function () {
-			return _api2.default.getInvoiceItems(invoice_id);
-		}).then(function (data) {
-			return _AppDispatcher2.default.dispatch({
-				type: 'item_added',
-				items: data
-			});
-		}).then(function () {
-			return _api2.default.getInvoices();
-		}).then(function (data) {
-			return _AppDispatcher2.default.dispatch({
-				type: 'invoice_changed',
-				invoices: data
-			});
-		});
-	},
-	itemInc: function itemInc(invoice_id, item_id, currentQuantity) {
-		_api2.default.changeItemQuantity(invoice_id, item_id, currentQuantity + 1).then(function () {
-			return calculateTotal(invoice_id);
-		}).then(function () {
-			return _api2.default.getInvoiceItems(invoice_id);
-		}).then(function (data) {
-			return _AppDispatcher2.default.dispatch({
-				type: 'item_changed',
-				items: data
-			});
-		}).then(function () {
-			return _api2.default.getInvoices();
-		}).then(function (data) {
-			return _AppDispatcher2.default.dispatch({
-				type: 'invoice_changed',
-				invoices: data
-			});
-		});
-	},
-	itemDec: function itemDec(invoice_id, item_id, currentQuantity) {
-		if (currentQuantity === 1) {
-			_api2.default.deleteItem(invoice_id, item_id).then(function () {
-				return calculateTotal(invoice_id);
-			}).then(function () {
-				return _api2.default.getInvoiceItems(invoice_id);
-			}).then(function (data) {
-				return _AppDispatcher2.default.dispatch({
-					type: 'item_changed',
-					items: data
-				});
-			}).then(function () {
-				return _api2.default.getInvoices();
-			}).then(function (data) {
-				return _AppDispatcher2.default.dispatch({
-					type: 'invoice_changed',
-					invoices: data
-				});
-			});
-		} else {
-			_api2.default.changeItemQuantity(invoice_id, item_id, currentQuantity - 1).then(function () {
-				return calculateTotal(invoice_id);
-			}).then(function () {
-				return _api2.default.getInvoiceItems(invoice_id);
-			}).then(function (data) {
-				return _AppDispatcher2.default.dispatch({
-					type: 'item_changed',
-					items: data
-				});
-			}).then(function () {
-				return _api2.default.getInvoices();
-			}).then(function (data) {
-				return _AppDispatcher2.default.dispatch({
-					type: 'invoice_changed',
-					invoices: data
-				});
-			});
-		}
-	},
-	changeInvoiceDiscount: function changeInvoiceDiscount(invoice_id, discount) {
-		_api2.default.changeInvoice(invoice_id, { discount: discount }).then(function () {
-			return calculateTotal(invoice_id);
-		}).then(function () {
-			return _api2.default.getInvoices();
-		}).then(function (data) {
-			return _AppDispatcher2.default.dispatch({
-				type: 'invoice_changed',
-				invoices: data
-			});
-		});
-	}
+    loadInvoices: function loadInvoices() {
+        window.loadInvoices = this.loadInvoices;
+        _api2.default.getInvoices().then(function (data) {
+            _AppDispatcher2.default.dispatch({
+                type: 'invoices_loaded',
+                invoices: data
+            });
+        });
+    },
+    loadProducts: function loadProducts() {
+        _api2.default.getProducts().then(function (data) {
+            _AppDispatcher2.default.dispatch({
+                type: 'products_loaded',
+                products: data
+            });
+        });
+    },
+    loadCustomers: function loadCustomers() {
+        _api2.default.getCustomers().then(function (data) {
+            _AppDispatcher2.default.dispatch({
+                type: 'customers_loaded',
+                customers: data
+            });
+        });
+    },
+    loadAll: function loadAll() {
+        return Promise.all([Actions.loadInvoices(), Actions.loadCustomers(), Actions.loadProducts()]);
+    },
+    createInvoice: function createInvoice() {
+        _api2.default.createInvoice().then(function (data) {
+            return _api2.default.getInvoices();
+        }).then(function (data) {
+            return _AppDispatcher2.default.dispatch({
+                type: 'invoice_created',
+                invoices: data
+            });
+        });
+    },
+    deleteInvoice: function deleteInvoice(id) {
+        _api2.default.deleteInvoice(id).then(function (data) {
+            return _api2.default.getInvoices();
+        }).then(function (data) {
+            return _AppDispatcher2.default.dispatch({
+                type: 'invoice_deleted',
+                invoices: data
+            });
+        });
+    },
+    loadInvoiceItems: function loadInvoiceItems(id) {
+        _api2.default.getInvoiceItems(id).then(function (data) {
+            return _AppDispatcher2.default.dispatch({
+                type: 'invoice_items_loaded',
+                items: data
+            });
+        });
+    },
+    changeCustomer: function changeCustomer(customer_id, invoice_id) {
+        _api2.default.changeCustomer(customer_id, invoice_id).then(function (data) {
+            return _api2.default.getInvoices();
+        }).then(function (data) {
+            return _AppDispatcher2.default.dispatch({
+                type: 'customer_changed',
+                invoices: data
+            });
+        });
+    },
+    addItem: function addItem(invoice_id, product_id) {
+        _api2.default.createItem(invoice_id).then(function (item) {
+            return item.id;
+        }).then(function (item_id) {
+            return _api2.default.changeItem(invoice_id, item_id, {
+                product_id: product_id,
+                quantity: 1
+            });
+        }).then(function () {
+            return calculateTotal(invoice_id);
+        }).then(function () {
+            return _api2.default.getInvoiceItems(invoice_id);
+        }).then(function (data) {
+            return _AppDispatcher2.default.dispatch({
+                type: 'item_added',
+                items: data
+            });
+        }).then(function () {
+            return _api2.default.getInvoices();
+        }).then(function (data) {
+            return _AppDispatcher2.default.dispatch({
+                type: 'invoice_changed',
+                invoices: data
+            });
+        });
+    },
+    itemInc: function itemInc(invoice_id, item_id, currentQuantity) {
+        _api2.default.changeItemQuantity(invoice_id, item_id, currentQuantity + 1).then(function () {
+            return calculateTotal(invoice_id);
+        }).then(function () {
+            return _api2.default.getInvoiceItems(invoice_id);
+        }).then(function (data) {
+            return _AppDispatcher2.default.dispatch({
+                type: 'item_changed',
+                items: data
+            });
+        }).then(function () {
+            return _api2.default.getInvoices();
+        }).then(function (data) {
+            return _AppDispatcher2.default.dispatch({
+                type: 'invoice_changed',
+                invoices: data
+            });
+        });
+    },
+    itemDec: function itemDec(invoice_id, item_id, currentQuantity) {
+        if (currentQuantity === 1) {
+            _api2.default.deleteItem(invoice_id, item_id).then(function () {
+                return calculateTotal(invoice_id);
+            }).then(function () {
+                return _api2.default.getInvoiceItems(invoice_id);
+            }).then(function (data) {
+                return _AppDispatcher2.default.dispatch({
+                    type: 'item_changed',
+                    items: data
+                });
+            }).then(function () {
+                return _api2.default.getInvoices();
+            }).then(function (data) {
+                return _AppDispatcher2.default.dispatch({
+                    type: 'invoice_changed',
+                    invoices: data
+                });
+            });
+        } else {
+            _api2.default.changeItemQuantity(invoice_id, item_id, currentQuantity - 1).then(function () {
+                return calculateTotal(invoice_id);
+            }).then(function () {
+                return _api2.default.getInvoiceItems(invoice_id);
+            }).then(function (data) {
+                return _AppDispatcher2.default.dispatch({
+                    type: 'item_changed',
+                    items: data
+                });
+            }).then(function () {
+                return _api2.default.getInvoices();
+            }).then(function (data) {
+                return _AppDispatcher2.default.dispatch({
+                    type: 'invoice_changed',
+                    invoices: data
+                });
+            });
+        }
+    },
+    changeInvoiceDiscount: function changeInvoiceDiscount(invoice_id, discount) {
+        _api2.default.changeInvoice(invoice_id, { discount: discount }).then(function () {
+            return calculateTotal(invoice_id);
+        }).then(function () {
+            return _api2.default.getInvoices();
+        }).then(function (data) {
+            return _AppDispatcher2.default.dispatch({
+                type: 'invoice_changed',
+                invoices: data
+            });
+        });
+    }
 };
 
 exports.default = Actions;
@@ -24496,7 +24428,7 @@ module.exports = Dispatcher;
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -24520,48 +24452,40 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var InvoiceStore = function (_ReduceStore) {
-    _inherits(InvoiceStore, _ReduceStore);
+  _inherits(InvoiceStore, _ReduceStore);
 
-    function InvoiceStore() {
-        _classCallCheck(this, InvoiceStore);
+  function InvoiceStore() {
+    _classCallCheck(this, InvoiceStore);
 
-        return _possibleConstructorReturn(this, (InvoiceStore.__proto__ || Object.getPrototypeOf(InvoiceStore)).call(this, _AppDispatcher2.default));
+    return _possibleConstructorReturn(this, (InvoiceStore.__proto__ || Object.getPrototypeOf(InvoiceStore)).call(this, _AppDispatcher2.default));
+  }
+
+  _createClass(InvoiceStore, [{
+    key: 'getInitialState',
+    value: function getInitialState() {
+      return [];
     }
+  }, {
+    key: 'reduce',
+    value: function reduce(state, action) {
+      switch (action.type) {
+        case 'invoices_loaded':
+          return action.invoices;
+        case 'invoice_created':
+          return action.invoices;
+        case 'invoice_deleted':
+          return action.invoices;
+        case 'customer_changed':
+          return action.invoices;
+        case 'invoice_changed':
+          return action.invoices;
+        default:
+          return state;
+      }
+    }
+  }]);
 
-    _createClass(InvoiceStore, [{
-        key: 'getInitialState',
-        value: function getInitialState() {
-            return [];
-        }
-    }, {
-        key: 'reduce',
-        value: function reduce(state, action) {
-            switch (action.type) {
-                case 'invoices_loaded':
-                    return action.invoices;
-                case 'invoice_created':
-                    {
-                        return action.invoices;
-                    }
-                case 'invoice_deleted':
-                    {
-                        return action.invoices;
-                    }
-                case 'customer_changed':
-                    {
-                        return action.invoices;
-                    }
-                case 'invoice_changed':
-                    {
-                        return action.invoices;
-                    }
-                default:
-                    return state;
-            }
-        }
-    }]);
-
-    return InvoiceStore;
+  return InvoiceStore;
 }(_utils.ReduceStore);
 
 var invoiceStore = new InvoiceStore();
