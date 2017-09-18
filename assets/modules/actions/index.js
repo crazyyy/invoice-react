@@ -2,19 +2,20 @@ import AppDispatcher from '../../AppDispatcher';
 import api from '../api';
 
 function calculateTotal(invoice_id) {
-    Promise.all([api.getInvoiceItems(invoice_id), api.getProducts()])
-        .then(array => {
-            let items = array[0];
-            let products = array[1];
-            let sum = 0;
-            items.forEach(item => {
-                let price = products.filter(product => item.product_id === product.id)[0].price;
-                let itemPrice = price * item.quantity;
-                sum = sum + itemPrice;
-            });
-            return Math.round(sum * 100) / 100;
-        })
-        .then(total => api.changeInvoice(invoice_id, { total: total }));
+  Promise.all([api.getInvoiceItems(invoice_id), api.getProducts()])
+    .then(array => {
+      let items = array[0];
+      let products = array[1];
+      let sum = 0;
+      items.forEach(item => {
+        let price = products.filter(product => item.product_id === product.id)[0].price;
+        let itemPrice = price * item.quantity;
+        sum = sum + itemPrice;
+      });
+
+      return Math.round(sum * 100) / 100;
+    })
+    .then(total => api.changeInvoice(invoice_id, { total: total }));
 }
 
 const Actions = {
@@ -50,12 +51,12 @@ const Actions = {
         return Promise.all([Actions.loadInvoices(), Actions.loadCustomers(), Actions.loadProducts()]);
     },
     createInvoice() {
-        api.createInvoice()
-            .then(data => api.getInvoices())
-            .then(data => AppDispatcher.dispatch({
-                type: 'invoice_created',
-                invoices: data
-            }));
+      api.createInvoice()
+        .then(data => api.getInvoices())
+        .then(data => AppDispatcher.dispatch({
+          type: 'invoice_created',
+          invoices: data
+        }));
     },
     deleteInvoice(id) {
         api.deleteInvoice(id)
@@ -72,13 +73,15 @@ const Actions = {
                 items: data
             }));
     },
+
     changeCustomer(customer_id, invoice_id) {
-        api.changeCustomer(customer_id, invoice_id)
-            .then(data => api.getInvoices())
-            .then(data => AppDispatcher.dispatch({
-                type: 'customer_changed',
-                invoices: data
-            }))
+      api.changeCustomer(customer_id, invoice_id)
+        .then(data => api.getInvoices())
+        .then(data => AppDispatcher.dispatch({
+          type: 'customer_changed',
+          invoices: data
+        })
+      )
     },
     addItem(invoice_id, product_id) {
         api.createItem(invoice_id)
@@ -100,18 +103,18 @@ const Actions = {
             }));
     },
     itemInc(invoice_id, item_id, currentQuantity) {
-        api.changeItemQuantity(invoice_id, item_id, currentQuantity + 1)
-            .then(() => calculateTotal(invoice_id))
-            .then(() => api.getInvoiceItems(invoice_id))
-            .then(data => AppDispatcher.dispatch({
-                type: 'item_changed',
-                items: data
-            }))
-            .then(() => api.getInvoices())
-            .then(data => AppDispatcher.dispatch({
-                type: 'invoice_changed',
-                invoices: data
-            }));
+      api.changeItemQuantity(invoice_id, item_id, currentQuantity + 1)
+      .then(() => calculateTotal(invoice_id))
+      .then(() => api.getInvoiceItems(invoice_id))
+      .then(data => AppDispatcher.dispatch({
+        type: 'item_changed',
+        items: data
+      }))
+      .then(() => api.getInvoices())
+      .then(data => AppDispatcher.dispatch({
+        type: 'invoice_changed',
+        invoices: data
+      }));
     },
     itemDec(invoice_id, item_id, currentQuantity) {
         if (currentQuantity === 1) {
@@ -145,13 +148,13 @@ const Actions = {
     },
 
     changeInvoiceDiscount(invoice_id, discount) {
-        api.changeInvoice(invoice_id, { discount: discount })
-            .then(() => calculateTotal(invoice_id))
-            .then(() => api.getInvoices())
-            .then(data => AppDispatcher.dispatch({
-                type: 'invoice_changed',
-                invoices: data
-            }));
+      api.changeInvoice(invoice_id, { discount: discount })
+      .then(() => calculateTotal(invoice_id))
+      .then(() => api.getInvoices())
+      .then(data => AppDispatcher.dispatch({
+        type: 'invoice_changed',
+        invoices: data
+      }));
     }
 };
 

@@ -7,18 +7,17 @@ import InvoiceItemsStore from '../stores/InvoiceItemsStore';
 import AppView from '../../views/AppView';
 import React from 'react';
 
-
-
 class AppContainer extends React.Component {
 	constructor() {
 		super();
-		AppActions.loadAll();
+    AppActions.loadAll();
+
 	}
-	static getStores() {
+  static getStores() {
 		return [InvoiceStore, CustomersStore, ProductsStore, InvoiceItemsStore];
 	}
 
-	static calculateState(prevState) {
+  static calculateState(prevState) {
 		return {
 			invoices: InvoiceStore.getState(),
 			customers: CustomersStore.getState(),

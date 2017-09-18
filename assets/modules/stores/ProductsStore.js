@@ -12,14 +12,15 @@ class ProductsStore extends ReduceStore {
     }
 
     reduce(state, action) {
-        switch (action.type) {
-            case 'products_loaded':
-                return action.products;
-            default:
-                return state;
-        }
+      switch (action.type) {
+        case 'products_loaded':
+          return action.products;
+        default:
+          return state;
+      }
     }
 }
 
 const productsStore = new ProductsStore();
+
 export default productsStore;
