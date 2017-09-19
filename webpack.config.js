@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-    entry: './assets/app.js',
+    entry: './assets/index.js',
     resolve: {
         extensions: [".jsx", ".js"],
     },

@@ -1,32 +1,31 @@
-import {ReduceStore} from "flux/utils";
-import AppDispatcher from '../../AppDispatcher';
-import AppActions from '../actions';
+import { ReduceStore } from 'flux/utils'
+import Dispatcher from '../../Dispatcher'
 
 class InvoiceItemsStore extends ReduceStore {
-    constructor() {
-        super(AppDispatcher);
-        window.a = this;
-    }
+	constructor() {
+		super(Dispatcher)
+		window.a = this
+	}
 
-    getInitialState() {
-        return [];
-    }
+	getInitialState() {
+		return []
+	}
 
-    reduce(state, action) {
-        switch (action.type) {
-            case 'invoice_items_loaded':
-                return action.items;
-            case 'item_added':{
-                return action.items;
-            }
-            case 'item_changed':{
-                return action.items;
-            }
-            default:
-                return state;
-        }
-    }
+	reduce(state, action) {
+		switch (action.type) {
+			case 'invoice_items_loaded':
+				return action.items
+			case 'item_added': {
+				return action.items
+			}
+			case 'item_changed': {
+				return action.items
+			}
+			default:
+				return state
+		}
+	}
 }
 
-const invoiceItemsStore = new InvoiceItemsStore();
-export default invoiceItemsStore;
+const invoiceItemsStore = new InvoiceItemsStore()
+export default invoiceItemsStore

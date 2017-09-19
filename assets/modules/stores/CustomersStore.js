@@ -1,25 +1,24 @@
-import {ReduceStore} from "flux/utils";
-import AppDispatcher from '../../AppDispatcher';
-import AppActions from "../actions";
+import { ReduceStore } from 'flux/utils'
+import Dispatcher from '../../Dispatcher'
 
 class CustomersStore extends ReduceStore {
-    constructor() {
-        super(AppDispatcher);
-    }
+	constructor() {
+		super(Dispatcher)
+	}
 
-    getInitialState() {
-        return [];
-    }
+	getInitialState() {
+		return []
+	}
 
-    reduce(state, action) {
-        switch (action.type) {
-            case 'customers_loaded':
-                return action.customers;
-            default:
-                return state;
-        }
-    }
+	reduce(state, action) {
+		switch (action.type) {
+			case 'customers_loaded':
+				return action.customers
+			default:
+				return state
+		}
+	}
 }
 
-const customersStore = new CustomersStore();
-export default customersStore;
+const customersStore = new CustomersStore()
+export default customersStore

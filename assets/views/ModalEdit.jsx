@@ -11,18 +11,9 @@ export default class ModalEdit extends Component {
 		this.changeDiscount = this.changeDiscount.bind(this)
 	}
 
-	componentDidMount() {
-		console.log('lil')
-		console.log(this.props)
-		console.log(this.props.statements)
-	}
-
 	setDiscount() {
-		console.log('this sytart')
-
-		let disc = this.props.statements.currentInvoice.discount
-		console.log('disc', disc)
-		return 5
+		let disc = this.props.statements.mainDiscount
+		return disc
 	}
 
 	calcAmount(a, b) {
@@ -38,8 +29,6 @@ export default class ModalEdit extends Component {
 	}
 
 	changeDiscount(event) {
-		console.log('this')
-		console.log(this)
 		let discount = event.target.value
 		if (discount < 0) {
 			discount = 0
@@ -52,15 +41,13 @@ export default class ModalEdit extends Component {
 	}
 
 	render() {
-		// console.log(this)
-
 		let currentInvoice = this.props.statements.currentInvoice
 		let currentCustomer = currentInvoice.customer_id
 		let invoiceItems = this.props.invoiceItems
 		let products = this.props.products
 
 		return (
-			<div id="addInvoice" className="modal fade" role="dialog">
+			<div id="editInvoice" className="modal fade" role="dialog">
 				<div className="modal-dialog">
 					<div className="modal-content">
 						<div className="modal-header">
@@ -222,7 +209,7 @@ export default class ModalEdit extends Component {
 										type="number"
 										min="0"
 										max="100"
-										value={this.state.selectedDiscount}
+										value={this.props.statements.mainDiscount}
 										onChange={this.changeDiscount}
 									/>
 								</div>
@@ -240,7 +227,6 @@ export default class ModalEdit extends Component {
 												100
 										}
 									/>
-									{currentInvoice.total}
 								</div>
 							</div>
 						</div>
