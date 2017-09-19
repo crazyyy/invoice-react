@@ -28,7 +28,8 @@ class AppContainer extends React.Component {
 			onSelectInvoice: AppActions.loadInvoiceItems,
 			onCustomerChange: AppActions.changeCustomer,
 			onAddItem: AppActions.addItem,
-			onItemInc: AppActions.itemInc,
+			onItemRemove: AppActions.itemRemove,
+      onItemInc: AppActions.itemInc,
 			onItemDec: AppActions.itemDec,
 			onChangeDiscount: AppActions.changeInvoiceDiscount
 		};
@@ -46,6 +47,7 @@ class AppContainer extends React.Component {
 				onSelectInvoice={this.state.onSelectInvoice}
 				onCustomerChange={this.state.onCustomerChange}
 				onAddItem={this.state.onAddItem}
+				onItemRemove={this.state.onItemRemove}
 				onItemInc={this.state.onItemInc}
 				onItemDec={this.state.onItemDec}
 				onChangeDiscount={this.state.onChangeDiscount}

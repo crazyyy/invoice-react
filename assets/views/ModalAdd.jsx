@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 
-export default class ModalAdd extends Component {
-
+export default class ModalEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,7 +16,6 @@ export default class ModalAdd extends Component {
   calcTotal() {
 
   }
-
 
   render() {
 
@@ -35,11 +33,10 @@ export default class ModalAdd extends Component {
 			<div className="modal-dialog">
 				<div className="modal-content">
 					<div className="modal-header">
-						<button type="button" className="close" data-dismiss="modal">
-							&times;
-						</button>
-						<h4 className="modal-title">Create New Incoice</h4>
-					</div>
+						<button type="button" className="close" data-dismiss="modal">&times;</button>
+						<h4 className="modal-title">Create New Invoice</h4>
+          </div>
+
 					<div className="modal-body">
 						<label>Contact</label>
 						<select className="form-control" onChange={e => {}}>
@@ -122,7 +119,7 @@ export default class ModalAdd extends Component {
 												</select>
 											</td>
 											<td>
-												<input type="number" value="1" placeholder="Quantity" className="form-control" />
+												<input type="number" placeholder="Quantity" className="form-control" />
 											</td>
 											<td />
 											<td>

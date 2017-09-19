@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import ModalAdd from './ModalAdd';
+import ModalEdit from './ModalEdit.jsx';
 
 export default class App extends Component {
 
@@ -23,7 +23,7 @@ export default class App extends Component {
     <div className="maincontainer">
       <div className="col-sm-12">
         <h1>List of Invoices</h1>
-        <table className="table">
+        <table className='table table--main'>
           <thead>
             <tr>
               <th>#</th>
@@ -82,7 +82,7 @@ export default class App extends Component {
 
 
 
-      <ModalAdd properties={this.props} statements={this.state} invoiceItems={invoiceItems} products={products} />
+      <ModalEdit properties={this.props} statements={this.state} invoiceItems={invoiceItems} products={products} />
 
 
       </div>

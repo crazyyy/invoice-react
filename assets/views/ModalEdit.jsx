@@ -1,125 +1,247 @@
-import React from 'react';
+import React, { Component } from 'react'
 
-console.log('this')
+export default class ModalEdit extends Component {
+	constructor(props) {
+		super(props)
+		this.state = {
+			selectedProduct: 0,
+			selectedQuantity: 1,
+			selectedDiscount: this.setDiscount()
+		}
+		this.changeDiscount = this.changeDiscount.bind(this)
+	}
 
-export default class ModalEdit extends React.Component {
+	componentDidMount() {
+		console.log('lil')
+		console.log(this.props)
+		console.log(this.props.statements)
+	}
+
+	setDiscount() {
+		console.log('this sytart')
+
+		let disc = this.props.statements.currentInvoice.discount
+		console.log('disc', disc)
+		return 5
+	}
+
+	calcAmount(a, b) {
+		return parseFloat(a * b).toFixed(2)
+	}
+
+	changeSelected(elementId) {
+		this.setState({ selectedProduct: elementId })
+	}
+
+	changeQuantity(quantity) {
+		this.setState({ selectedQuantity: quantity })
+	}
+
+	changeDiscount(event) {
+		console.log('this')
+		console.log(this)
+		let discount = event.target.value
+		if (discount < 0) {
+			discount = 0
+		}
+		if (discount > 100) {
+			discount = 100
+		}
+		this.setState({ selectedDiscount: discount })
+		this.props.properties.onChangeDiscount(this.props.statements.currentInvoice.id, discount)
+	}
+
 	render() {
+		// console.log(this)
+
+		let currentInvoice = this.props.statements.currentInvoice
+		let currentCustomer = currentInvoice.customer_id
+		let invoiceItems = this.props.invoiceItems
+		let products = this.props.products
+
 		return (
-			<div id="myModal" className="modal fade" role="dialog">
+			<div id="addInvoice" className="modal fade" role="dialog">
 				<div className="modal-dialog">
 					<div className="modal-content">
 						<div className="modal-header">
 							<button type="button" className="close" data-dismiss="modal">
 								&times;
 							</button>
-							<h4 className="modal-title">Invoice Details</h4>
+							<h4 className="modal-title">Create New Invoice</h4>
 						</div>
+
 						<div className="modal-body">
 							<div className="form-group">
-								<label>Customer</label>
+								<label className="control-label">Contact</label>
 								<select
 									className="form-control"
 									onChange={e => {
-										this.props.onCustomerChange(e.target.value, this.state.currentInvoice.id);
+										this.props.properties.onCustomerChange(e.target.value, currentInvoice.id)
 									}}
 								>
-									{customers.map(el => (
-										<option key={el.id} value={el.id}>
+									{this.props.properties.customers.map(el => (
+										<option key={el.id} value={el.id} selected={el.id === currentCustomer ? 'selected' : null}>
 											{el.name}
 										</option>
 									))}}
 								</select>
 							</div>
 							<div className="form-group">
-								<label>Products</label>
-								<table className="table">
-									<thead>
-										<tr>
-											<th>Name</th>
-											<th>Price</th>
-											<th>Quantity</th>
-											<th />
-											<th />
-										</tr>
-									</thead>
-									<tbody>
-										{invoiceItems.map(el => {
-											return (
-												<tr key={el.id}>
-													<td>
-														{products.filter(product => product.id === el.product_id)[0] ===
-														undefined ? null : (
-															products.filter(product => product.id === el.product_id)[0]
-																.name
-														)}
-													</td>
-													<td>
-														{products.filter(product => product.id === el.product_id)[0] ===
-														undefined ? null : (
-															products.filter(product => product.id === el.product_id)[0]
-																.price
-														)}
-													</td>
-													<td>{el.quantity}</td>
-													<td
-														className="btn-link"
-														onClick={() =>
-															this.props.onItemInc(
-																this.state.currentInvoice.id,
-																el.id,
-																el.quantity
+								<label className="control-label">Items:</label>
+								<div className="well">
+									<table className="table table--items table-striped table-sm">
+										<thead>
+											<tr>
+												<th>Description</th>
+												<th>Quantity</th>
+												<th>Amount</th>
+												<th>Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											{invoiceItems.map(el => {
+												return (
+													<tr key={el.id}>
+														<td>
+															{products.filter(product => product.id === el.product_id)[0] === undefined ? null : (
+																products.filter(product => product.id === el.product_id)[0].name +
+																' - $' +
+																products.filter(product => product.id === el.product_id)[0].price
 															)}
-													>
-														+
-													</td>
-													<td
-														className="btn-link"
-														onClick={() =>
-															this.props.onItemDec(
-																this.state.currentInvoice.id,
-																el.id,
-																el.quantity
+														</td>
+														<td>
+															<div className="input-group">
+																<input className="form-control" type="number" value={el.quantity} disabled />
+																<div className="input-group-btn">
+																	<button
+																		className="btn btn-info"
+																		onClick={() =>
+																			this.props.properties.onItemInc(currentInvoice.id, el.id, el.quantity)}
+																	>
+																		<i className="glyphicon glyphicon-plus" />
+																	</button>
+																	<button
+																		className="btn btn-warning"
+																		onClick={() =>
+																			this.props.properties.onItemDec(currentInvoice.id, el.id, el.quantity)}
+																	>
+																		<i className="glyphicon glyphicon-minus" />
+																	</button>
+																</div>
+															</div>
+														</td>
+														<td>
+															{products.filter(product => product.id === el.product_id)[0] === undefined ? null : (
+																this.calcAmount(
+																	products.filter(product => product.id === el.product_id)[0].price,
+																	el.quantity
+																)
 															)}
+														</td>
+														<td>
+															<button
+																type="button"
+																className="btn-xs btn-danger btn-delete-item btn btn-default"
+																onClick={() => this.props.properties.onItemRemove(currentInvoice.id, el.id)}
+															>
+																<i className="glyphicon glyphicon-trash" />
+															</button>
+														</td>
+													</tr>
+												)
+											})}
+
+											<tr>
+												<td>
+													<select
+														className="form-control"
+														id="products"
+														onChange={e => this.changeSelected(e.target.value)}
 													>
-														-
-													</td>
-												</tr>
-											);
-										})}
-									</tbody>
-								</table>
-								<select
-									className="form-control"
-									id="products"
-									onChange={e => {
-										this.props.onAddItem(this.state.currentInvoice.id, e.target.value);
-									}}
-								>
-									{products.map(el => (
-										<option key={el.id} value={el.id}>
-											{el.name}
-										</option>
-									))}
-								</select>
+														{this.props.properties.products.map(el => (
+															<option key={el.id} value={el.id}>
+																{el.name} - ${el.price}
+															</option>
+														))}}
+													</select>
+												</td>
+												<td>
+													<input
+														type="number"
+														placeholder="Quantity"
+														className="form-control"
+														onChange={e => this.changeQuantity(e.target.value)}
+													/>
+												</td>
+												<td />
+												<td>
+													<button
+														id="add-item-btn"
+														type="button"
+														className="btn-xs btn-success btn btn-default"
+														onClick={e => {
+															this.props.properties.onAddItem(
+																currentInvoice.id,
+																this.state.selectedProduct,
+																this.state.selectedQuantity
+															)
+														}}
+													>
+														<i className="glyphicon glyphicon-plus" />Add
+													</button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
 							</div>
-							<div className="form-group">
-								<label value={this.state.currentInvoice.discount}>Discount</label>
-								<input
-									type="number"
-									min="0"
-									max="100"
-									className="form-control"
-									id="discount"
-									onChange={e => {
-										if (e.target.value < 0) {
-											e.target.value = 0;
+							<div className="form-group row">
+								<div className="col-md-3">
+									<label>Sub Total</label>
+								</div>
+								<div className="col-md-3">
+									<label value={currentInvoice.discount}>Discount %</label>
+								</div>
+								<div className="col-md-6">
+									<label>Total</label>
+								</div>
+							</div>
+							<div className="form-group row">
+								<div className="col-md-3">
+									<input
+										type="text"
+										className="form-control"
+										id="subtotal"
+										disabled
+										value={'$' + currentInvoice.total}
+									/>
+								</div>
+								<div className="col-md-3">
+									<input
+										className="form-control"
+										type="number"
+										min="0"
+										max="100"
+										value={this.state.selectedDiscount}
+										onChange={this.changeDiscount}
+									/>
+								</div>
+								<div className="col-md-6">
+									<input
+										type="text"
+										className="form-control"
+										id="total"
+										disabled
+										value={
+											'$' +
+											Math.round(
+												(currentInvoice.total - currentInvoice.total * (currentInvoice.discount / 100)) * 100
+											) /
+												100
 										}
-										if (e.target.value > 100) {
-											e.target.value = 100;
-										}
-										this.props.onChangeDiscount(this.state.currentInvoice.id, e.target.value);
-									}}
-								/>
+									/>
+									{currentInvoice.total}
+								</div>
 							</div>
 						</div>
 						<div className="modal-footer">
@@ -130,6 +252,6 @@ export default class ModalEdit extends React.Component {
 					</div>
 				</div>
 			</div>
-		);
+		)
 	}
 }

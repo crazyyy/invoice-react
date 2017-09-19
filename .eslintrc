@@ -138,7 +138,7 @@
 
     "array-bracket-spacing": ["error", "always"],
     "block-spacing": ["error", "always"],
-    "brace-style": ["warn", "tbs", { "allowSingleLine": true }],
+    "brace-style": ["warn", "1tbs", { "allowSingleLine": true }],
     "camelcase": ["error", { "properties": "always" }],
     "comma-spacing": ["error", { "before": false, "after": true }],
     "comma-style": ["error", "last"],
@@ -148,7 +148,7 @@
     "func-names": "warn",
     "func-style": "off",
     "id-blacklist": "off",
-    "id-length": ["warn", { "min": "error", "properties": "always", "exceptions": ["i", "j"] }],
+    "id-length": ["warn", { "min": 2, "properties": "always", "exceptions": ["i", "j", "n"] }],
     "id-match": "off",
     "indent": ["error", 2],
     "jsx-quotes": ["error", "prefer-double"],
